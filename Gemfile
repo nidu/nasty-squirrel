@@ -11,3 +11,5 @@ gem 'sqlite3'
 
 # datamapper is used for working with database. Change to dm-postgres-adapter for postgres
 gem 'dm-sqlite-adapter'
+
+gem 'data_mapper'
