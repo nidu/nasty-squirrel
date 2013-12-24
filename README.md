@@ -16,3 +16,5 @@ Launch `scripts/setup-mac.sh`. Make sure that xcode dev tools, ruby, rubygems an
 To run app launch `scripts/start.sh`.
 
 To run tests launch `scripts/test.sh`.
+
+To run irb with app environment launch `scripts/with_env.sh`.
