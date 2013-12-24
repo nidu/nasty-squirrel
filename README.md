@@ -10,4 +10,9 @@ Actually project's initial goal is to learn Sinatra, DataMapper and AngularJS.
 Clone repo and then
 
 #### Mac
-Launch `setup-mac.sh`. Make sure that xcode dev tools, ruby, rubygems and homebrew are installed and available.
+Launch `scripts/setup-mac.sh`. Make sure that xcode dev tools, ruby, rubygems and homebrew are installed and available.
+
+## Running
+To run app launch `scripts/start.sh`.
+
+To run tests launch `scripts/test.sh`.
