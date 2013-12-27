@@ -1,0 +1,8 @@
+<div class="container-fluid">
+  <h1>New article</h1>
+  Tags:
+  <input type="text" ng-model="article.tag" typeahead="tag as tag.name for tag in availableTags($viewValue)" />{{article.tag}}
+  <div ng-repeat="tag in article.tags">
+    {{tag}}
+  </div> 
+</div>

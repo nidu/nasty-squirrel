@@ -1,26 +1,21 @@
 <html ng-app="app">
 <head>
   <title>Nasty Squirrel</title>
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/bootstrap-responsive.css">
 </head>
 <body>
   <h1>Nasty Squirrel</h1>
-  Stores and searches
+  <i>Stores and searches</i>
 
-  <div ng-controller="SearchCtrl">
-    Search
-    <input type="text" ng-model="data.query" />
-    {{data.query | reverse}}
-  </div>  
+  <div>
+    <a ui-sref="search">Home</a>
+    <a ui-sref="newArticle">New article</a>
+    <a href="https://github.com/nidu/nasty-squirrel">About</a>
+  </div>
 
-  <script src="js/lib/jquery.js"></script>
-  <script src="js/lib/angular/angular.js"></script>
-  <script src="js/lib/ui-bootstrap-0.7.0.js"></script>
-  <script src="js/lib/ui-bootstrap-tpls-0.7.0.js"></script>
-  <script src="js/lib/ui-utils.js"></script>
+  <div ui-view></div>
 
-  <script src="js/app/app.js"></script>
-  <script src="js/app/router.js"></script>
-  <script src="js/app/controllers.js"></script>
-  <script src="js/app/filters.js"></script>
+  <script data-main="js/app/main.js" src="js/lib/require.js"></script>
 </body>
 </html>
