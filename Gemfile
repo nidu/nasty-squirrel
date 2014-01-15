@@ -7,9 +7,8 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 
 # currently sqlite3 is used as database
-gem 'sqlite3'
+gem 'sqlite3', '1.3.6'
 
-# datamapper is used for working with database. Change to dm-postgres-adapter for postgres
-gem 'dm-sqlite-adapter'
-
-gem 'data_mapper'
+# using active records
+gem 'sinatra-activerecord'
+gem 'rake'
