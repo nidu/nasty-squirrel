@@ -1,4 +1,18 @@
-<div>
-  Search
-	<input type="text" ng-model="data.query" />
-</div>
+<form class="search">
+  <div class="input-append">
+    <input type="text" class="span4" placeholder="Let's search!" ng-model="data.query" />
+    <button type="button" class="btn" ng-click="$state.go('search.results')">Search</button>
+  </div>
+  <h5>Tags</h5>
+  <input type="text" ng-model="data.tagQuery"
+         typeahead="tag as tag.name for tag in queryTags($viewValue)"
+         typeahead-on-select="tagSelected($model)" />
+  <ul class="tag-list">
+    <li ng-repeat="tag in data.tags">
+      {{tag.name}}
+      <button class="close" ng-click="removeTag(tag)">&times;</button>
+    </li>
+  </ul>
+</form>
+
+<div ui-view></div>

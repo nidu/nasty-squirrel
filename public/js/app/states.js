@@ -9,6 +9,11 @@ define(['angular', 'app/app'], function(angular, app) {
 				templateUrl: "partials/search.html",
 	      controller: "SearchCtrl"
 			})
+			.state("search.results", {
+				url: "/articles",
+				templateUrl: "partials/search_result.html",
+				controller: "SearchResultCtrl"
+			})
 			.state("newArticle", {
 				url: "/articles/new",
 				templateUrl: "partials/articles/new.html",

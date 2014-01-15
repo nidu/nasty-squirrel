@@ -1,20 +1,36 @@
-<html ng-app="app">
+<!DOCTYPE HTML>
+<html lang="en" ng-app="app">
 <head>
   <title>Nasty Squirrel</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/bootstrap-responsive.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <h1>Nasty Squirrel</h1>
-  <i>Stores and searches</i>
 
-  <div>
-    <a ui-sref="search">Home</a>
-    <a ui-sref="newArticle">New article</a>
-    <a href="https://github.com/nidu/nasty-squirrel">About</a>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a ui-sref="search" class="brand">Nasty Squirrel</a>
+        <ul class="nav" class="btn-navbar">
+          <li class="divider-vertical"></li>
+          <li>
+            <a ui-sref="search">Search</a>
+          </li>
+          <li>
+            <a ui-sref="newArticle">Add</a>
+          </li>
+          <li>
+            <a href="https://github.com/nidu/nasty-squirrel">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-  <div ui-view></div>
+  <div class="container">
+    <div ui-view></div>
+  </div>
 
   <script data-main="js/app/main.js" src="js/lib/require.js"></script>
 </body>

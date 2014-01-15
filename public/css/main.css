@@ -1,0 +1,19 @@
+body {
+  padding-top: 50px;
+}
+
+ul.tag-list {
+  list-style-type: none;
+}
+
+ul.tag-list > li {
+  float: left;
+  margin: 0px 5px;
+  padding: 0px 5px;
+  background-color: #e6e6e6;
+}
+
+ul.tag-list > li > button {
+  float: none;
+  vertical-align: text-bottom;
+}
