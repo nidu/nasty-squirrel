@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 20140115175606) do
 
   create_table "articles", force: true do |t|
+    t.string   "url_title"
     t.string   "title"
     t.text     "description"
     t.text     "content"

@@ -1,7 +1,7 @@
 class InitialStructure < ActiveRecord::Migration
   def change
     create_table :articles do |t|
-      # t.integer :readable_id
+      t.string :url_title
       t.string :title
       t.text :description
       t.text :content
