@@ -1,0 +1,12 @@
+<div class="{{inputDivClass}}">
+  <input type="search" ng-model="tagSearch.query" class="form-control" id="{{inputId}}"
+         typeahead="tag as tag.title for tag in queryTags($viewValue)"
+         typeahead-on-select="tagSelected($model)" />
+</div>
+<div class="{{listDivClass}}">
+  <ul class="list-inline">
+    <li ng-repeat="tag in tagSearch.tags">
+      {{tag.title}}<button class="close" ng-click="removeTag(tag)">&times;</button>
+    </li>
+  </ul>
+</div>

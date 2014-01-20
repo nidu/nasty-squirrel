@@ -3,16 +3,16 @@
 <head>
   <title>Nasty Squirrel</title>
   <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/bootstrap-responsive.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.css">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a ui-sref="search" class="brand">Nasty Squirrel</a>
-        <ul class="nav" class="btn-navbar">
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="collapse navbar-collapse">
+      <div class="navbar-header">
+        <a ui-sref="search" class="navbar-brand">Nasty Squirrel</a>
+        <ul class="nav navbar-nav">
           <li class="divider-vertical"></li>
           <li>
             <a ui-sref="search">Search</a>
@@ -26,12 +26,11 @@
         </ul>
       </div>
     </div>
-  </div>
+  </nav>
 
   <div class="container">
     <div ui-view></div>
   </div>
-
   <script data-main="js/app/main.js" src="js/lib/require.js"></script>
 </body>
 </html>

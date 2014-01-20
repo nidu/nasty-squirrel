@@ -1,6 +1,7 @@
 define([
   'angular',
   'app/controllers',
+  'app/directives',
   'app/services'
   ], function(angular, controllers) {
     return angular.module('app', [
@@ -8,6 +9,7 @@ define([
       "ngResource",
       "ui.bootstrap",
       'app.controllers',
+      'app.directives',
       'app.services'
     ]);
   }

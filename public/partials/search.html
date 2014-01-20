@@ -5,11 +5,11 @@
   </div>
   <h5>Tags</h5>
   <input type="text" ng-model="data.tagQuery"
-         typeahead="tag as tag.name for tag in queryTags($viewValue)"
+         typeahead="tag as tag.title for tag in queryTags($viewValue)"
          typeahead-on-select="tagSelected($model)" />
   <ul class="tag-list">
     <li ng-repeat="tag in data.tags">
-      {{tag.name}}
+      {{tag.title}}
       <button class="close" ng-click="removeTag(tag)">&times;</button>
     </li>
   </ul>

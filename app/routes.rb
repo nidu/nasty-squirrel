@@ -8,10 +8,15 @@ get '/search' do
 end
 
 get '/tags' do
-  fields = [:id, :name]
-  Tag.all(
-    :name.like => "#{params[:query]}%",
-    :order => [:name.asc],
-    :fields => fields
-  ).to_json(only: fields)
+  q = Tag.select(:id, :title)
+    .order(:title)
+
+  q = q.where("title like ?", params[:query] + "%") if params[:query]
+
+  if params[:exclude]
+    ids = parse_id_array(params[:exclude])
+    q = q.where("id not in (?)", ids) if ids.size > 0
+  end
+
+  q.all.to_json
 end

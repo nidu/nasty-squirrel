@@ -1,8 +1,26 @@
-<div class="container-fluid">
-  <h2>New article</h2>
-  Tags:
-  <input type="text" ng-model="article.tag" typeahead="tag as tag.name for tag in availableTags($viewValue)" typeahead-on-select="onTagSelect($model)" />
-  <div ng-repeat="tag in article.tags">
-    {{tag.name}}
-  </div> 
-</div>
+<form class="form-horizontal" role="form">
+	<h3>New article</h3>
+	<div class="form-group">
+		<label for="title">Title</label>
+		<input type="text" name="title" id="title" class="form-control">
+	</div>
+
+	<div class="form-group">
+		<label for="description">Description</label>
+		<textarea name="description" id="description" class="form-control" rows="3"></textarea>
+	</div>
+
+	<div class="form-group">
+		<label for="tagQuery">Tags</label>
+		<div class="row" input-id="tagQuery" input-div-class="col-xs-3" list-div-class="" ng-model="article.tags" nsq-tag-search></div>
+	</div>
+
+	<div class="form-group">
+		<label for="content">Content</label>
+		<textarea name="content" id="content" class="form-control" rows="15"></textarea>
+	</div>
+
+	<button type="submit" class="btn btn-default">Add</button>
+</form>
+
+<div ui-view></div>
