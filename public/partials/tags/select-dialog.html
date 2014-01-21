@@ -1,0 +1,13 @@
+<div class="modal-header">
+	{{select.header}}
+</div>
+<div class="modal-body">
+	<form class="form-inline" role="form">
+		<div class="form-group">
+			<label class="sr-only" for="tagSearch">Into</label>
+			<input type="text" class="form-control" id="tagSearch" ng-model="select.tag"
+						 typeahead="tag as tag.title for tag in queryTags($viewValue)"
+						 typeahead-on-select="tagSelected($model)">
+		</div>
+	</form>
+</div>

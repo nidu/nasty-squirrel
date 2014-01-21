@@ -5,7 +5,9 @@ require.config({
     "app": "../app"
   },
   shim: {
-    "angular": {"exports" : "angular"},
+    "angular": {
+      "exports" : "angular"
+    },
     "angular-ui-router": ["angular"],
     "angular-resource": ["angular"],
     "ui-bootstrap-0.10.0": ["angular"],
@@ -19,7 +21,7 @@ require.config({
     // "angular-cookies": ["angular"],
     // "angular-animate": ["angular"],
     "angular-mocks": {
-      deps: ["angular"],
+      "deps": ["angular"],
       "exports": "angular.mock"
     }
   },

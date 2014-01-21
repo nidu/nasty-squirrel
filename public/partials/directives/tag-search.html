@@ -1,7 +1,8 @@
 <div class="{{inputDivClass}}">
   <input type="search" ng-model="tagSearch.query" class="form-control" id="{{inputId}}"
          typeahead="tag as tag.title for tag in queryTags($viewValue)"
-         typeahead-on-select="tagSelected($model)" />
+         typeahead-on-select="tagSelected($model)"
+         ng-keypress="keyPressed($event)" />
 </div>
 <div class="{{listDivClass}}">
   <ul class="list-inline">

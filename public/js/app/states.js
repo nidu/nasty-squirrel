@@ -19,6 +19,16 @@ define(['angular', 'app/app'], function(angular, app) {
 				templateUrl: "partials/articles/new.html",
 	      controller: "NewArticleCtrl"
 			})
+			.state("tags", {
+				url: "/tags",
+				templateUrl: "partials/tags/index.html",
+				controller: "TagsCtrl",
+				resolve: {
+					tags: function(Tag) {
+						return Tag.query();
+					}
+				}
+			})
 	})
 	
 })

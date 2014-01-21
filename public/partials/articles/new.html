@@ -12,8 +12,9 @@
 
 	<div class="form-group">
 		<label for="tagQuery">Tags</label>
-		<div class="row" input-id="tagQuery" input-div-class="col-xs-3" list-div-class="" ng-model="article.tags" nsq-tag-search></div>
+		<div class="row nsq-tag-search" input-id="tagQuery" input-div-class="col-xs-3" ng-model="article.tags" nsq-tag-search only-existing></div>
 	</div>
+	<a ui-sref="tags">Edit/watch tags</a>
 
 	<div class="form-group">
 		<label for="content">Content</label>

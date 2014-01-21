@@ -1,0 +1,7 @@
+<h3>Tags</h3>
+<ul class="list-inline">
+	<li ng-repeat="tag in tags">
+		<button ng-click="open(tag)">{{tag.title}}</button>
+		<button class="close" ng-click="deleteTag(tag)">&times;</button>
+	</li>
+</ul>

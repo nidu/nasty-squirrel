@@ -6,10 +6,11 @@ define(["angular"], function(angular) {
 					ngModel: "=",
 					inputId: "@",
 					inputDivClass: "@",
-					listDivClass: "@"
+					listDivClass: "@",
+					onlyExisting: "@"
 				},
 				templateUrl: "partials/directives/tag-search.html",
-				controller: "TagSearchCtrl",
+				controller: "TagSearchCtrl"
 			}
 		})
 })
