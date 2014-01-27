@@ -17,17 +17,17 @@ define(['angular', 'app/app'], function(angular, app) {
 			.state("newArticle", {
 				url: "/articles/new",
 				templateUrl: "partials/articles/new.html",
-	      controller: "NewArticleCtrl"
-			})
-			.state("tags", {
-				url: "/tags",
-				templateUrl: "partials/tags/index.html",
-				controller: "TagsCtrl",
-				resolve: {
-					tags: function(Tag) {
-						return Tag.query();
-					}
-				}
+	      controller: "EditArticleCtrl",
+	      resolve: {
+	      	article: function(Article) {
+	      		var a = new Article();
+	      		a.tags = [];
+	      		a.articleProducts = [];
+	      		a.attachments = [];
+	      		a.relatedArticles = [];
+	      		return a;
+	      	}
+	      }
 			})
 	})
 	

@@ -12,3 +12,5 @@ gem 'sqlite3', '1.3.6'
 # using active records
 gem 'sinatra-activerecord'
 gem 'rake'
+
+gem 'rspec'

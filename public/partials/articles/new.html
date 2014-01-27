@@ -1,27 +1,97 @@
-<form class="form-horizontal" role="form">
-	<h3>New article</h3>
+<form role="form">
+	<h3 ng-if="isNew">New article</h3>
+	<h3 ng-if="!isNew">Edit article {{article.title}}</h3>
+
 	<div class="form-group">
 		<label for="title">Title</label>
-		<input type="text" name="title" id="title" class="form-control">
+		<input type="text" name="title" id="title" class="form-control" ng-model="article.title">
 	</div>
 
 	<div class="form-group">
 		<label for="description">Description</label>
-		<textarea name="description" id="description" class="form-control" rows="3"></textarea>
+		<textarea name="description" id="description" class="form-control" rows="3" ng-model="article.description"></textarea>
 	</div>
 
 	<div class="form-group">
 		<label for="tagQuery">Tags</label>
-		<div class="row nsq-tag-search" input-id="tagQuery" input-div-class="col-xs-3" ng-model="article.tags" nsq-tag-search only-existing></div>
+		<div class="row">
+			<div class="col-xs-3">
+				<input type="text" class="form-control" ng-model="temp.tag" id="tagQuery"
+							 typeahead="tag as tag.title for tag in queryTags($viewValue)"
+							 typeahead-on-select="addTag($model)"
+							 ng-keypress="tagKeyPressed($event)">
+			</div>
+		</div>
+		<div>
+			<ul class="list-inline form-list-inline">
+				<li ng-repeat="tag in article.tags">
+					{{tag.title}}<button class="close" ng-click="removeTag(tag)">&times;</button>
+				</li>
+			</ul>
+		</div>
 	</div>
-	<a ui-sref="tags">Edit/watch tags</a>
+
+	<div class="form-group">
+		<label for="productQuery">Products</label>
+		<div class="row">
+			<div class="col-xs-3">
+				<input type="text" class="form-control" ng-model="temp.articleProduct.product" id="productQuery"
+							 typeahead="product as product.title for product in queryProducts($viewValue)"
+							 typeahead-on-select="productSelected($model)"
+							 ng-keypress="productKeyPressed($event)">
+			</div>
+			<div class="col-xs-2">
+				<select class="form-control" ng-options="productVersion as (productVersion.version ? productVersion.version : 'All') for productVersion in temp.productVersions" ng-model="temp.articleProduct.productVersion"></select>
+			</div>
+			<div class="btn-group col-xs-3">
+				<button class="btn btn-default" ng-model="temp.articleProduct.appliesTo" ng-disabled="!temp.articleProduct.productVersion.version" btn-radio="">Exact</button>
+				<button class="btn btn-default" ng-model="temp.articleProduct.appliesTo" ng-disabled="!temp.articleProduct.productVersion.version" btn-radio="'above'">Above</button>
+				<button class="btn btn-default" ng-model="temp.articleProduct.appliesTo" ng-disabled="!temp.articleProduct.productVersion.version" btn-radio="'below'">Below</button>
+			</div>
+			<button class="btn btn-primary" ng-click="addArticleProduct(temp.articleProduct)" ng-disabled="!(temp.articleProduct.product && temp.articleProduct.productVersion)">Add</button>
+		</div>
+
+		<div>
+			<ul class="list-inline form-list-inline">
+				<li ng-repeat="articleProduct in article.articleProducts">
+					{{articleProduct | articleProduct}}
+					<button class="close" ng-click="removeArticleProduct(articleProduct)">&times;</button>
+				</li>
+			</ul>
+		</div>
+	</div>
 
 	<div class="form-group">
 		<label for="content">Content</label>
-		<textarea name="content" id="content" class="form-control" rows="15"></textarea>
+		<textarea name="content" id="content" class="form-control" rows="15" ng-model="article.content"></textarea>
 	</div>
 
-	<button type="submit" class="btn btn-default">Add</button>
-</form>
+	<div class="form-group">
+		<label>Attachments</label>
+		<input type="file" fileread="temp.attachment" id="attachmentTitle">
+		<button class="btn btn-default" ng-click="addAttachment(temp.attachment)">Attach</button>
+		<ul>
+			<li ng-repeat="attachment in article.attachments">
+				{{attachment.title}}
+				<button class="close" ng-click="removeAttachment(attachment)">&times;</button>
+			</li>
+		</ul>
+	</div>
 
-<div ui-view></div>
+	<div class="form-group">
+		<label for="relatedArticleQuery">Related articles</label>
+		<input type="text" class="form-control" id="relatedArticleQuery" ng-model="temp.relatedArticle"
+					 typeahead="article as article.title for article in queryArticles($viewValue)"
+				   typeahead-on-select="addArticle($model)">
+		<ul>
+			<li ng-repeat="relatedArticle in article.relatedArticles">
+				<div>
+					<span class="strong">{{relatedArticle.title}}</span>
+					{{relatedArticle.description}}
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<button type="submit" class="btn btn-primary" ng-click="saveArticle(article)">Save article</button>
+</form>

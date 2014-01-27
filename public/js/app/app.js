@@ -2,7 +2,8 @@ define([
   'angular',
   'app/controllers',
   'app/directives',
-  'app/services'
+  'app/services',
+  'app/filters'
   ], function(angular, controllers) {
     return angular.module('app', [
       "ui.router",
@@ -10,7 +11,8 @@ define([
       "ui.bootstrap",
       'app.controllers',
       'app.directives',
-      'app.services'
+      'app.services',
+      'app.filters'
     ]);
   }
 );

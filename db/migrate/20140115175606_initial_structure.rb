@@ -64,7 +64,7 @@ class InitialStructure < ActiveRecord::Migration
     end
 
     create_join_table :articles, :product_versions, table_name: :articles_products do |t|
-      t.string :also_applies_to      
+      t.string :applies_to      
     end
 
     create_table :features do |t|

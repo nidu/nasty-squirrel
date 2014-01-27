@@ -13,109 +13,98 @@ define(['angular'], function(angular) {
       $scope.search = function() {};
     })
 
-    .controller("NewArticleCtrl", function($scope, Tag) {
-      $scope.article = {
-        tags: []
-      };
-    })
-
-    .controller("TagSearchCtrl", function($scope, Tag) {
-      $scope.tagSearch = {
-        query: "",
-        tags: []
-      }
-
-      var updateParent = function() {
-        $scope.ngModel = $scope.tagSearch.tags
-      };
+    .controller("EditArticleCtrl", function($scope, Article, Tag, Product, ProductVersion, Utils, article) {
+      $scope.article = article;
+      $scope.isNew = article.id != "";
 
       $scope.queryTags = function(query) {
-        return Tag.queryAsPromise(query, $scope.tagSearch.tags)
+        return Tag.query({query: query, exclude: Utils.excludeToStr($scope.article.tags)}).$promise
       };
 
-      $scope.tagSelected = function(model) {
-        if (model) {
-          $scope.tagSearch.tags.push(model);
-          updateParent();
+      $scope.addTag = function(tag) {
+        if (tag) {
+          var tags = $scope.article.tags;
+          var i = 0;
+          while (i < tags.length && tags[i].title != tag.title) { i++; }
+
+          if (i == tags.length)
+            $scope.article.tags.push(tag);
         }
-        $scope.tagSearch.query = "";
+        $scope.temp.tag = "";
       };
 
       $scope.removeTag = function(tag) {
-        var tags = $scope.tagSearch.tags;
-        var index = tags.indexOf(tag);
-        if (index > -1) {
-          $scope.tagSearch.tags.splice(index, 1);
-          updateParent();
+        var index = $scope.article.tags.indexOf(tag);
+        if (index != -1) {
+          $scope.article.tags.splice(index, 1);
         }
       };
 
-      $scope.keyPressed = function(e) {
+      $scope.tagKeyPressed = function(e) {
+        var code = e.keyCode || e.which;
+        if (code == 13 && e.target.value) {
+          e.preventDefault();
+          $scope.addTag({title: e.target.value});
+        }
+      };
+
+      $scope.queryProducts = function(query) {
+        return Product.query({query: query}).$promise
+      };
+
+      $scope.productSelected = function(product) {
+        if (product) {
+          $scope.temp.productVersions = ProductVersion.query({product_id: product.id}, function() {
+            $scope.temp.articleProduct.productVersion = $scope.temp.productVersions[0];
+          });
+        }
+      };
+
+      $scope.addArticleProduct = function(articleProduct) {
+        if (articleProduct.product && articleProduct.productVersion) {
+          console.log(articleProduct);
+          $scope.article.articleProducts.push(articleProduct);
+
+          $scope.temp.articleProduct = {
+            product: null,
+            productVersion: null,
+            appliesTo: ""
+          };
+          $scope.temp.productVersions = null;
+        }
+      };
+
+      $scope.removeArticleProduct = function(articleProduct) {
+        var index = $scope.article.articleProducts.indexOf(articleProduct);
+        if (index != -1) {
+          $scope.article.articleProducts.splice(index, 1);
+        }
+      };
+
+      $scope.productKeyPressed = function(e) {
         var code = e.keyCode || e.which;
         if (code == 13) {
           e.preventDefault();
-
-          if ($scope["onlyExisting"] == undefined) {
-            if (e.target.value) {
-              $scope.tagSelected({title: e.target.value});
-            }
-          }
         }
       };
-    })
 
-    .controller("TagsCtrl", function($scope, $modal, Tag, tags) {
-      $scope.tags = tags;
-
-      $scope.open = function(mergeFromTag) {
-        $modal.open({
-          templateUrl: "partials/tags/select-dialog.html",
-          controller: "SelectTagDialogCtrl",
-          resolve: {
-            excludeTags: function() {
-              return [mergeFromTag];
-            },
-            header: function() {
-              return "Merge into " + mergeFromTag.title + "...";
-            }
-          }
-        }).result.then(function(selectedTag) {
-          console.log("Merge", mergeFromTag, selectedTag);
-          Tag.merge({from: mergeFromTag.id, into: selectedTag.id});
-          Tag.query({query: "ARARA"});
-        });
+      $scope.addAttachment = function(attachment) {
+        if (attachment) {
+          if (!attachment.title) attachment.title = attachment.fileName;
+          $scope.article.attachments.push(attachment);
+          $scope.temp.attachment = null;
+        }
       };
 
-      $scope.deleteTag = function(tag) {
-        Tag.remove({tagId: tag.id}, function() {
-          var index = tags.inexOf(tag);
-          if (index > -1) {
-            $scope.tags.splice(index, 1);
-          }
-        });
-      };
-    })
-
-    .controller("SelectTagDialogCtrl", function($scope, $modalInstance, Tag, excludeTags, header) {
-      $scope.select = {
-        excludeTags: excludeTags,
-        header: header
-      }
-
-      $scope.queryTags = function(query) {
-        return Tag.queryAsPromise(query, $scope.select.excludeTags);
+      $scope.removeAttachment = function(attachment) {
+        var index = $scope.article.attachments.indexOf(attachment);
+        if (index != -1) {
+          $scope.article.attachments.splice(index, 1);
+        }        
       };
 
-      $scope.tagSelected = function(model) {
-        $scope.ok();
-      };
-
-      $scope.ok = function() {
-        $modalInstance.close($scope.select.tag);
-      };
-
-      $scope.cancel = function() {
-        $modalInstance.dismiss("cancel");
+      $scope.saveArticle = function(article) {
+        article.$save();
       };
     })
 })
