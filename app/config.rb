@@ -1,10 +1,12 @@
-require 'sinatra/config_file'
+require 'sequel'
 
 set :app_root, File.expand_path("..", File.dirname(__FILE__))
 
 set :public_folder, "#{settings.app_root}/public"
 
-config_file "#{settings.app_root}/config/config.yml"
+set :app_title, 'Nasty Squirrel'
+
+DB = Sequel.connect "sqlite://#{settings.app_root}/db/#{settings.environment}.sqlite3"
 
 class AppHelpers
   def self.test
