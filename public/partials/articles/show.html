@@ -1,0 +1,25 @@
+<h3>{{article.title}}</h3>
+<a ui-sref="articles.edit({id: article.id})">Edit</a>
+<p>{{article.content}}</p>
+<div>
+	<strong>Tags</strong>
+	<ul class="list-inline">
+		<li ng-repeat="tag in article.tags">{{tag.title}}</li>
+	</ul>
+</div>
+<div>
+	<strong>Products</strong>
+	<ul class="list-inline">
+		<li ng-repeat="productVersionRange in article.productVersionRanges">
+			{{productVersionRange | productVersionRange}}
+		</li>
+	</ul>
+</div>
+<div>
+	<strong>Related articles</strong>
+	<ul>
+		<li ng-repeat="relatedArticle in article.relatedArticles">
+			{{article.title}}
+		</li>
+	</ul>
+</div>

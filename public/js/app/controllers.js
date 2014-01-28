@@ -13,9 +13,13 @@ define(['angular'], function(angular) {
       $scope.search = function() {};
     })
 
-    .controller("EditArticleCtrl", function($scope, Article, Tag, Product, ProductVersion, Utils, article) {
+    .controller("ShowArticleCtrl", function($scope, $stateParams, Article, article) {
       $scope.article = article;
-      $scope.isNew = article.id != "";
+    })
+
+    .controller("EditArticleCtrl", function($scope, $state, Article, Tag, Product, ProductVersion, Utils, article) {
+      $scope.article = article;
+      $scope.isNew = article.id == undefined || article.id == null || article.id == "";
 
       $scope.queryTags = function(query) {
         return Tag.query({query: query, exclude: Utils.excludeToStr($scope.article.tags)}).$promise
@@ -55,29 +59,29 @@ define(['angular'], function(angular) {
       $scope.productSelected = function(product) {
         if (product) {
           $scope.temp.productVersions = ProductVersion.query({product_id: product.id}, function() {
-            $scope.temp.articleProduct.productVersion = $scope.temp.productVersions[0];
+            $scope.temp.productVersionRange.startProductVersion = $scope.temp.productVersions[0];
+            $scope.temp.productVersionRange.endProductVersion = $scope.temp.productVersions[0];
           });
         }
       };
 
-      $scope.addArticleProduct = function(articleProduct) {
-        if (articleProduct.product && articleProduct.productVersion) {
-          console.log(articleProduct);
-          $scope.article.articleProducts.push(articleProduct);
+      $scope.addProductVersionRange = function(productVersionRange) {
+        if (productVersionRange.product) {
+          $scope.article.productVersionRanges.push(productVersionRange);
 
-          $scope.temp.articleProduct = {
+          $scope.temp.productVersionRange = {
             product: null,
-            productVersion: null,
-            appliesTo: ""
+            startProductVersion: null,
+            endProductVersion: null
           };
           $scope.temp.productVersions = null;
         }
       };
 
-      $scope.removeArticleProduct = function(articleProduct) {
-        var index = $scope.article.articleProducts.indexOf(articleProduct);
+      $scope.removeProductVersionRange = function(productVersionRange) {
+        var index = $scope.article.productVersionRanges.indexOf(productVersionRange);
         if (index != -1) {
-          $scope.article.articleProducts.splice(index, 1);
+          $scope.article.productVersionRanges.splice(index, 1);
         }
       };
 
@@ -104,7 +108,9 @@ define(['angular'], function(angular) {
       };
 
       $scope.saveArticle = function(article) {
-        article.$save();
+        article.$save(function(a) {
+          $state.go("articles.show", {id: a.id});
+        });
       };
     })
 })

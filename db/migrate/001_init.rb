@@ -1,11 +1,12 @@
 Sequel.migration do
-  up do
+  transaction
+  change do
     create_table(:articles) do
       primary_key :id
 
       String :title
       String :url_title
-      String :description
+      # String :description
       String :content, text: true
       foreign_key :author_id, :consultants
       DateTime :created_at
@@ -14,13 +15,15 @@ Sequel.migration do
       unique :url_title
     end
 
-    create_join_table({source_article_id: :articles, target_articles_id: :articles}, name: :related_articles)
+    create_join_table({source_article_id: :articles, target_article_id: :articles}, name: :related_articles)
 
     create_table(:tags) do
       primary_key :id
 
       String :title
       String :description
+
+      unique :title
     end
 
     create_join_table(article_id: :articles, tag_id: :tags)
@@ -87,13 +90,12 @@ Sequel.migration do
       String :alias
     end
 
-    create_table(:article_product_versions) do
-      primary_key [:article_id, :product_version_is]
+    create_table(:articles_product_version_ranges) do
+      primary_key :id
 
       foreign_key :article_id, :articles
-      foreign_key :product_version_is, :product_versions
-      String :applies_to
-      index [:article_id, :product_version_is]
+      foreign_key :start_product_version_id, :product_versions
+      foreign_key :end_product_version_id, :product_versions
     end
 
     create_join_table(consultant_id: :consultants, product_id: :products)
@@ -110,22 +112,5 @@ Sequel.migration do
     end
 
     create_join_table(product_id: :products, feature_id: :features)
-  end
-
-  down do
-    drop_table(:articles)
-    drop_table(:related_articles)
-    drop_table(:tags)
-    drop_table(:articles_tags)
-    drop_table(:attachments)
-    drop_table(:articles_attachments)
-    drop_table(:consultants)
-    drop_table(:consultants_products)
-    drop_table(:products)
-    drop_table(:product_aliass)
-    drop_table(:product_versions)
-    drop_table(:features)
-    drop_table(:products_features)
-    drop_table(:article_product_versions)
   end
 end

@@ -3,24 +3,18 @@ define(["angular"], function(angular) {
   return angular.module("app.services", [])
 
     .factory("Article", function($resource, $http, Utils) {
-      var Resource = $resource('articles/:id', {id: "@id"}, {
+      var Resource = $resource('articles/:id', {}, {
         save: {method: "POST", transformRequest: function(data, headersGetter) {
-          var article = angular.copy(data);
-
-          article.tags.forEach(function(tag) {
-            if (tag.id)
-              delete tag.title;
-          });
-
-          article.articleProducts = article.articleProducts.map(function(p) {
-            return {id: p.productVersion.id, appliesTo: p.appliesTo};
-          });
-
-          article.relatedArticles = article.relatedArticles.map(function(a) {
-            return {id: a.id};
-          });
-
-          console.log("Transform request", data, article);
+          var article = {
+            title: data.title,
+            content: data.content,
+            tagIds: data.tags.filter(function(t) { return t.id }).map(function(t) { return t.id }),
+            tags: data.tags.filter(function(t) { return !t.id }),
+            productVersionRanges: data.productVersionRanges.map(function(range) {
+              return {startProductVersionId: range.startProductVersion.id, endProductVersionId: range.endProductVersion.id}
+            }),
+            relatedArticleIds: data.relatedArticles.map(function(a) { return a.id })
+          };
 
           return angular.toJson(article);
         }}

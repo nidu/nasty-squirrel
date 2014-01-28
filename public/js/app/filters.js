@@ -6,19 +6,24 @@ define(['angular'], function(angular) {
 			};
 		})
 
-		.filter("articleProduct", function() {
-			return function(articleProduct) {
-				if (articleProduct.productVersion.version) {
-					var v = "";
-					switch (articleProduct.appliesTo) {
-						case "above": v = ">"; break;
-						case "below": v = "<"; break;
+		.filter("productVersionRange", function() {
+			return function(productVersionRange) {
+				var version = "";
+				if (productVersionRange.startProductVersion.version) {
+					if (productVersionRange.endProductVersion.version) {
+						version = productVersionRange.startProductVersion.version + " - " + productVersionRange.endProductVersion.version;
+					} else {
+						version = "> " + productVersionRange.startProductVersion.version;
 					}
-					
-					return articleProduct.product.title + " " + v + articleProduct.productVersion.version;
 				} else {
-					return articleProduct.product.title;
-				}
+					if (productVersionRange.endProductVersion.version) {
+						version = "< " + productVersionRange.endProductVersion.version;
+					} else {
+						version = "";
+					}
+				};
+
+				return (productVersionRange.product.title + " " + version).trim();
 			};
 		})
 })
