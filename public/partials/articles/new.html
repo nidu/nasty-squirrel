@@ -69,11 +69,15 @@
 
 	<div class="form-group">
 		<label>Attachments</label>
-		<input type="file" fileread="temp.attachment" id="attachmentTitle">
-		<button class="btn btn-default" ng-click="addAttachment(temp.attachment)">Attach</button>
+		<div class="well" file-drop-area="article.attachments" file-upload-progress="temp.fileUploadProgress">
+			<p class="text-center text-muted">Drag and drop files here</p>
+			<progressbar value="temp.fileUploadProgress">
+				{{temp.fileUploadProgress | number:0}}% uploaded
+			</progressbar>
+		</div>
 		<ul>
 			<li ng-repeat="attachment in article.attachments">
-				{{attachment.title}}
+				{{attachment.fileName}} ({{attachment.size}})
 				<button class="close" ng-click="removeAttachment(attachment)">&times;</button>
 			</li>
 		</ul>
@@ -87,10 +91,8 @@
 				   typeahead-on-select="addArticle($model)">
 		<ul>
 			<li ng-repeat="relatedArticle in article.relatedArticles">
-				<div>
-					<span class="strong">{{relatedArticle.title}}</span>
-					{{relatedArticle.description}}
-				</div>
+				<span class="strong">{{relatedArticle.title}}</span>
+				{{relatedArticle.description}}
 			</li>
 		</ul>
 	</div>

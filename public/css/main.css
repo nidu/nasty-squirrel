@@ -5,3 +5,12 @@ body {
 .form-list-inline li {
   padding: 6px;
 }
+
+.file-dragover {
+	background-image: none;
+	background-color: #EDD7C7;
+}
+
+.dz-preview {
+	display: none;
+}

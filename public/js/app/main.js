@@ -42,6 +42,7 @@ require([
   "ui-bootstrap-0.10.0",
   "ui-bootstrap-tpls-0.10.0",
   "angular-mocks",
+  "dropzone-amd-module",
   // "angular-animate",
   // "angular-cookies",
   // "angular-loader",

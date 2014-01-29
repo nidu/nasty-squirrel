@@ -17,7 +17,7 @@ define(['angular'], function(angular) {
       $scope.article = article;
     })
 
-    .controller("EditArticleCtrl", function($scope, $state, Article, Tag, Product, ProductVersion, Utils, article) {
+    .controller("EditArticleCtrl", function($scope, $state, Article, Tag, Product, Attachment, ProductVersion, Utils, article) {
       $scope.article = article;
       $scope.isNew = article.id == undefined || article.id == null || article.id == "";
 
@@ -111,6 +111,21 @@ define(['angular'], function(angular) {
         article.$save(function(a) {
           $state.go("articles.show", {id: a.id});
         });
+      };
+
+      $scope.removeAttachment = function(attachment) {
+        var removeFromList = function() {
+          var index = $scope.article.attachments.indexOf(attachment);
+          if (index != -1) {
+            $scope.article.attachments.splice(index, 1);
+          }
+        };
+
+        if (attachment.isNew) {
+          Attachment.delete({id: attachment.id}, removeFromList);
+        } else {
+          removeFromList();
+        }
       };
     })
 })

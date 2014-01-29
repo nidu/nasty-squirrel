@@ -52,6 +52,9 @@ get '/articles/:id' do
   article[:relatedArticles] = DB[:articles].select(:id, :title).order(:title)
     .join(:related_articles, target_article_id: :id).where(source_article_id: article_id).all
 
+  article[:attachments] = DB[:attachments].select{[id, file_name.as(fileName), size, mime_type.as(mimeType)]}.order(:file_name)
+    .join(:articles_attachments, attachment_id: :id).where(article_id: article_id).all
+
   article[:productVersionRanges] = DB["""
     select
       range.id as range_id,
@@ -87,16 +90,6 @@ get '/articles/:id' do
   end
 
   article.to_json
-end
-
-get '/q/:q' do
-  id = DB[:tags].insert(title: params[:q])
-  DB[:articles_tags].multi_insert([{article_id: 1, tag_id: id}])
-  
-  {
-    tag: DB[:tags].where(id: id).all,
-    join: DB[:articles_tags].where({article_id: 1, tag_id: id}).all
-  }.to_json
 end
 
 post '/articles' do
@@ -190,10 +183,48 @@ post '/articles' do
       end
     end
 
+    def bind_attachments(article_id, data)
+      t = DB[:articles_attachments]
+      attachment_ids = data['attachmentIds']
+      existing_ids = t.where(article_id: article_id).map :attachment_id
+
+      ids_to_delete = existing_ids - attachment_ids
+      if ids_to_delete.size > 0
+        t.where('article_id = ? and attachment_id in ?', article_id, ids_to_delete).delete
+      end
+
+      ids_to_insert = attachment_ids - existing_ids
+      if ids_to_insert.size > 0
+        attachments_to_insert = ids_to_insert.collect do |id|
+          {article_id: article_id, attachment_id: id}
+        end
+        t.multi_insert attachments_to_insert
+      end
+    end
+
     bind_tags article_id, data
     bind_product_versions article_id, data
     bind_related_articles article_id, data
+    bind_attachments article_id, data
   end
 
   result.to_json
+end
+
+post '/attachments' do
+  file_info = params[:file]
+  file = file_info[:tempfile]
+  attachment_id = DB[:attachments].insert(
+    file_name: file_info[:filename],
+    mime_type: file_info[:type],
+    size: file_info[:size],
+    content: Sequel.blob(file.read)
+  )
+
+  {id: attachment_id}.to_json
+end
+
+delete '/attachments/:id' do
+  DB[:attachments].where(id: params[:id]).delete
+  {status: 1}.to_json
 end

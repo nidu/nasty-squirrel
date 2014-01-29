@@ -1,25 +1,39 @@
-define(["angular"], function(angular) {
+define(["angular", "dropzone-amd-module"], function(angular, Dropzone) {
 	return angular.module("app.directives", [])
 
-		// inspired by http://stackoverflow.com/questions/17063000/ng-model-for-input-type-file?answertab=votes#tab-top
-		.directive("fileread", [function () {
-	    return {
+    .directive("fileDropArea", function() {
+      return {
         scope: {
-          fileread: "="
+          fileDropArea: "=",
+          fileUploadProgress: "="
         },
-        link: function (scope, element, attributes) {
-          element.bind("change", function (changeEvent) {
-            var reader = new FileReader();
-            reader.onload = function (loadEvent) {
-              scope.$apply(function () {
-                scope.fileread.file = loadEvent.target.result;
+        link: function(scope, element, attrs) {
+          var dropzone = new Dropzone(element[0], {
+            scope: "EA",
+            url: "/attachments",
+            init: function() {
+              this.on("success", function(file, responseStr) {
+                response = angular.fromJson(responseStr);
+                scope.$apply(function() {
+                  scope.fileDropArea.push({
+                    id: response.id,
+                    fileName: file.name,
+                    size: file.size,
+                    mimeType: file.type,
+                    isNew: true
+                  });
+                  scope.fileUploadProgress = 100;
+                });
+              });
+              
+              this.on("uploadprogress", function(file, progress) {
+                scope.$apply(function() {
+                  scope.fileUploadProgress = progress;
+                });
               });
             }
-            if (!scope.fileread) scope.fileread = {};
-            scope.fileread.fileName = changeEvent.target.files[0].name;
-            reader.readAsDataURL(changeEvent.target.files[0]);
           });
         }
-	    }
-		}]);		
+      }
+    })
 })

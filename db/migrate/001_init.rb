@@ -31,13 +31,14 @@ Sequel.migration do
     create_table(:attachments) do
       primary_key :id
 
-      String :title
+      # String :title
       String :file_name
       String :mime_type
+      Integer :size
       File :content
     end
 
-    create_join_table(article_id: :articles, attachment_id: :attachments)
+    create_join_table(article_id: :articles, attachment_id: {table: :attachments, on_delete: :cascade})
 
     create_table(:consultants) do
       primary_key :id

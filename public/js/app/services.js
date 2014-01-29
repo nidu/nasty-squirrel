@@ -13,7 +13,8 @@ define(["angular"], function(angular) {
             productVersionRanges: data.productVersionRanges.map(function(range) {
               return {startProductVersionId: range.startProductVersion.id, endProductVersionId: range.endProductVersion.id}
             }),
-            relatedArticleIds: data.relatedArticles.map(function(a) { return a.id })
+            relatedArticleIds: data.relatedArticles.map(function(a) { return a.id }),
+            attachmentIds: data.attachments.map(function(a) { return a.id })
           };
 
           return angular.toJson(article);
@@ -21,6 +22,10 @@ define(["angular"], function(angular) {
       });
 
       return Resource;
+    })
+
+    .factory("Attachment", function($resource, $http, Utils) {
+      return $resource('attachments/:id', {id: "@id"});
     })
     
     .factory("Tag", function($resource, $http, Utils) {
