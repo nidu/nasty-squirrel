@@ -11,7 +11,11 @@ define(['angular'], function(angular) {
 				var version = "";
 				if (productVersionRange.startProductVersion.version) {
 					if (productVersionRange.endProductVersion.version) {
-						version = productVersionRange.startProductVersion.version + " - " + productVersionRange.endProductVersion.version;
+						if (productVersionRange.startProductVersion.version == productVersionRange.endProductVersion.version) {
+							version = productVersionRange.startProductVersion.version;
+						} else {
+							version = productVersionRange.startProductVersion.version + " - " + productVersionRange.endProductVersion.version;
+						}
 					} else {
 						version = "> " + productVersionRange.startProductVersion.version;
 					}

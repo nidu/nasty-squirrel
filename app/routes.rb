@@ -107,8 +107,10 @@ post '/articles' do
     end
 
     article_id = if is_new
+      title = data['title']
       DB[:articles].insert(
-        title: data['title'],
+        title: title,
+        url_title: CGI.escape(title.gsub(' ', '_')),
         content: data['content']
       )
     else
@@ -211,20 +213,32 @@ post '/articles' do
   result.to_json
 end
 
+get '/attachments/:id/content' do
+  attachment = DB[:attachments].where(id: params[:id]).first
+  headers \
+    "Content-Type" => attachment[:mime_type],
+    "Content-Length" => attachment[:size],
+    "Content-Disposition" => "attachment;filename=\"#{attachment[:file_name]}\""
+  attachment[:content]
+end
+
 post '/attachments' do
   file_info = params[:file]
   file = file_info[:tempfile]
   attachment_id = DB[:attachments].insert(
     file_name: file_info[:filename],
     mime_type: file_info[:type],
-    size: file_info[:size],
+    size: file.size,
     content: Sequel.blob(file.read)
   )
 
   {id: attachment_id}.to_json
 end
 
-delete '/attachments/:id' do
-  DB[:attachments].where(id: params[:id]).delete
+delete '/attachments/:ids' do
+  ids = parse_id_array[params[:ids]]
+  if ids.size > 0
+    DB[:attachments].where('id in ?', params[:id]).delete
+  end
   {status: 1}.to_json
 end

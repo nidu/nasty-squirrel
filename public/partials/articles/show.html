@@ -1,6 +1,6 @@
 <h3>{{article.title}}</h3>
 <a ui-sref="articles.edit({id: article.id})">Edit</a>
-<p>{{article.content}}</p>
+<p ng-bind-html="article.content"></p>
 <div>
 	<strong>Tags</strong>
 	<ul class="list-inline">
@@ -27,7 +27,7 @@
 	<strong>Attachments</strong>
 	<ul>
 		<li ng-repeat="attachment in article.attachments">
-			{{attachment.fileName}}			
+			<a href="/attachments/{{attachment.id}}/content">{{attachment.fileName}}</a>
 		</li>
 	</ul>
 </div>

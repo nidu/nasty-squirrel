@@ -19,6 +19,13 @@ task :fixtures => [:migrate] do |t|
   Fixtures.apply
 end
 
+desc 'apply fixtures from db/fixtures.rb (set RACK_ENV to specify database)'
+task :fixtures_private => [:migrate] do |t|
+	require_relative 'db/private_fixtures'
+  PrivateFixtures.clear
+  PrivateFixtures.apply
+end
+
 desc 'launch irb with app context'
 task :irb do |t|
 	require 'irb'

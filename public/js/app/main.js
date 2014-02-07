@@ -10,12 +10,20 @@ require.config({
     },
     "angular-ui-router": ["angular"],
     "angular-resource": ["angular"],
+    "angular-sanitize": ["angular"],
     "ui-bootstrap-0.10.0": ["angular"],
     "ui-bootstrap-tpls-0.10.0": ["angular"],
+    "angular-ui-tinymce": ["angular", "tinymce.min"],
+    "tinymce.min": {
+      exports: "tinyMCE",
+      init: function() {
+        this.tinyMCE.DOM.events.domLoaded = true;
+        return this.tinyMCE;
+      }
+    },
     // "angular-ui-utils": ["angular"],
     // "angular-loader": ["angular"],
     // "angular-scenario": ["angular"],
-    // "angular-sanitize": ["angular"],
     // "angular-route": ["angular"],
     // "angular-mocks": ["angular"],
     // "angular-cookies": ["angular"],
@@ -43,11 +51,13 @@ require([
   "ui-bootstrap-tpls-0.10.0",
   "angular-mocks",
   "dropzone-amd-module",
+  "tinymce.min",
+  "angular-ui-tinymce",
+  "angular-sanitize",
   // "angular-animate",
   // "angular-cookies",
   // "angular-loader",
   // "angular-route",
-  // "angular-sanitize",
   // "angular-scenario",
   // "angular-touch",
   // "angular-ui-utils",
@@ -56,6 +66,6 @@ require([
   var $html = angular.element(document.getElementsByTagName('html')[0]);
 
   angular.element().ready(function() {
-    angular.resumeBootstrap([app['name']]);
+    angular.resumeBootstrap([app.name]);
   });
 });

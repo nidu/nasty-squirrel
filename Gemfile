@@ -12,3 +12,5 @@ gem 'sequel'
 gem 'rake'
 
 gem 'rspec'
+
+gem 'elasticsearch'

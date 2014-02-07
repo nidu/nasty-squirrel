@@ -9,6 +9,8 @@ define([
       "ui.router",
       "ngResource",
       "ui.bootstrap",
+      "ui.tinymce",
+      "ngSanitize",
       'app.controllers',
       'app.directives',
       'app.services',

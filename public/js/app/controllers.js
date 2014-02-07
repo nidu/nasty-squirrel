@@ -1,6 +1,6 @@
 define(['angular'], function(angular) {
 
-  return angular.module('app.controllers', [])
+  return angular.module('app.controllers', ['ngSanitize'])
 
     .controller("SearchCtrl", function($scope, Tag) {
       $scope.data = {
@@ -15,14 +15,23 @@ define(['angular'], function(angular) {
 
     .controller("ShowArticleCtrl", function($scope, $stateParams, Article, article) {
       $scope.article = article;
+
+      $scope.content = article.content;
+
+      // $scope.trustedContent = function() { return $sce.trustAsHtml($scope.article.content) }
     })
 
     .controller("EditArticleCtrl", function($scope, $state, Article, Tag, Product, Attachment, ProductVersion, Utils, article) {
       $scope.article = article;
       $scope.isNew = article.id == undefined || article.id == null || article.id == "";
 
+      $scope.tinymceOptions = {
+        skin_url: '/css/tinymce-skins/lightgray',
+        menubar: "edit view format"
+      };
+
       $scope.queryTags = function(query) {
-        return Tag.query({query: query, exclude: Utils.excludeToStr($scope.article.tags)}).$promise
+        return Tag.query({query: query, exclude: Utils.mapAttrToStr($scope.article.tags)}).$promise
       };
 
       $scope.addTag = function(tag) {
@@ -85,6 +94,24 @@ define(['angular'], function(angular) {
         }
       };
 
+      $scope.startVersionChanged = function() {
+        var startIndex = $scope.temp.productVersions.indexOf($scope.temp.productVersionRange.startProductVersion);
+        var endIndex = $scope.temp.productVersions.indexOf($scope.temp.productVersionRange.endProductVersion);
+
+        if (startIndex > endIndex) {
+          $scope.temp.productVersionRange.endProductVersion = $scope.temp.productVersionRange.startProductVersion;
+        }
+      }
+
+      $scope.endVersionChanged = function() {
+        var startIndex = $scope.temp.productVersions.indexOf($scope.temp.productVersionRange.startProductVersion);
+        var endIndex = $scope.temp.productVersions.indexOf($scope.temp.productVersionRange.endProductVersion);
+
+        if (startIndex == -1 || startIndex > endIndex) {
+          $scope.temp.productVersionRange.startProductVersion = $scope.temp.productVersionRange.endProductVersion;
+        }
+      }
+
       $scope.productKeyPressed = function(e) {
         var code = e.keyCode || e.which;
         if (code == 13) {
@@ -101,19 +128,6 @@ define(['angular'], function(angular) {
       };
 
       $scope.removeAttachment = function(attachment) {
-        var index = $scope.article.attachments.indexOf(attachment);
-        if (index != -1) {
-          $scope.article.attachments.splice(index, 1);
-        }        
-      };
-
-      $scope.saveArticle = function(article) {
-        article.$save(function(a) {
-          $state.go("articles.show", {id: a.id});
-        });
-      };
-
-      $scope.removeAttachment = function(attachment) {
         var removeFromList = function() {
           var index = $scope.article.attachments.indexOf(attachment);
           if (index != -1) {
@@ -127,5 +141,15 @@ define(['angular'], function(angular) {
           removeFromList();
         }
       };
+
+      $scope.saveArticle = function(article) {
+        article.$save(function(a) {
+          $state.go("articles.show", {id: a.id});
+        });
+      };
+
+      $scope.cancel = function(article) {
+        article.attachments.filter(function(a) { return a.isNew }).map(function(a) { return a.id })
+      }
     })
 })

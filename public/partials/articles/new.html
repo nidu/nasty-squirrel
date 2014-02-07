@@ -40,13 +40,13 @@
 			<div class="col-xs-3">
 				<div class="input-group">
 					<span class="input-group-addon">From</span>
-					<select class="form-control" ng-options="productVersion as (productVersion.version ? productVersion.version : 'All') for productVersion in temp.productVersions" ng-model="temp.productVersionRange.startProductVersion"></select>
+					<select class="form-control" ng-options="productVersion as (productVersion.version ? productVersion.version : 'All') for productVersion in temp.productVersions" ng-model="temp.productVersionRange.startProductVersion" ng-change="startVersionChanged()"></select>
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<div class="input-group">
 					<span class="input-group-addon">To</span>
-					<select class="form-control" ng-options="productVersion as (productVersion.version ? productVersion.version : 'All') for productVersion in temp.productVersions" ng-model="temp.productVersionRange.endProductVersion"></select>
+					<select class="form-control" ng-options="productVersion as (productVersion.version ? productVersion.version : 'All') for productVersion in temp.productVersions" ng-model="temp.productVersionRange.endProductVersion" ng-change="endVersionChanged()"></select>
 				</div>
 			</div>
 			<button class="btn btn-primary" ng-click="addProductVersionRange(temp.productVersionRange)" ng-disabled="!(temp.productVersionRange.product)">Add</button>
@@ -64,15 +64,15 @@
 
 	<div class="form-group">
 		<label for="content">Content</label>
-		<textarea name="content" id="content" class="form-control" rows="15" ng-model="article.content" autocomplete="off"></textarea>
+		<textarea ui-tinymce="tinymceOptions" name="content" id="content" class="form-control" rows="15" ng-model="article.content" autocomplete="off"></textarea>
 	</div>
 
 	<div class="form-group">
 		<label>Attachments</label>
 		<div class="well" file-drop-area="article.attachments" file-upload-progress="temp.fileUploadProgress">
-			<p class="text-center text-muted">Drag and drop files here</p>
+			<p class="text-center text-muted dz-message">Drag and drop files here</p>
+			<p ng-if="temp.fileUploadProgress">{{temp.fileUploadProgress | number:0}}% uploaded</p>
 			<progressbar value="temp.fileUploadProgress">
-				{{temp.fileUploadProgress | number:0}}% uploaded
 			</progressbar>
 		</div>
 		<ul>
@@ -98,4 +98,5 @@
 	</div>
 
 	<button type="submit" class="btn btn-primary" ng-click="saveArticle(article)">Save article</button>
+	<button type="button" class="btn btn-primary" ng-click="cancel(article)">Cancel</button>
 </form>

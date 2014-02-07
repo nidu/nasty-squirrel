@@ -42,13 +42,12 @@ define(["angular"], function(angular) {
 
     .factory("Utils", function($http) {
       return {
-        excludeToStr: function(exclude, field) {
-          if (!field) field = "id";
+        mapAttrToStr: function(array, field) {
+          if (typeof field !== 'undefined' || field == '')
+            field = 'id';
 
-          return exclude.map(function(e) {
-            return e[field]
-          }).join(",");
+          return array.map(function(o) { return o[field]; }).join(",");
         }
-      }
+      };
     })
 })
